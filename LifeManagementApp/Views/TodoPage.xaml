@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:LifeManagementApp.ViewModels"
+             x:Class="LifeManagementApp.Views.TodoPage"
+             Title="Todos">
+    <Grid RowDefinitions="Auto,Auto,*" Padding="20" RowSpacing="10">
+
+        <VerticalStackLayout Grid.Row="0" Spacing="8">
+            <Entry Placeholder="New todo" Text="{Binding NewTitle}" />
+            <HorizontalStackLayout Spacing="10">
+                <Picker Title="Priority" WidthRequest="100"
+                        ItemsSource="{Binding Priorities}"
+                        SelectedItem="{Binding NewPriority}" />
+                <DatePicker Date="{Binding NewDueDate}" />
+                <Button Text="Add" Command="{Binding AddCommand}" />
+            </HorizontalStackLayout>
+        </VerticalStackLayout>
+
+        <HorizontalStackLayout Grid.Row="1" Spacing="10">
+            <Button Text="Sort by priority" Command="{Binding SortByPriorityCommand}" />
+            <Button Text="Sort by date" Command="{Binding SortByTimeCommand}" />
+        </HorizontalStackLayout>
+
+        <CollectionView Grid.Row="2" ItemsSource="{Binding Todos}">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Grid ColumnDefinitions="*,Auto" Padding="0,6">
+                        <VerticalStackLayout>
+                            <Label Text="{Binding Title}" FontAttributes="Bold" />
+                            <Label Text="{Binding Info}" FontSize="12" />
+                        </VerticalStackLayout>
+                        <Button Grid.Column="1" Text="Delete"
+                                Command="{Binding Source={RelativeSource AncestorType={x:Type vm:TodoViewModel}}, Path=DeleteCommand}"
+                                CommandParameter="{Binding .}" />
+                    </Grid>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </Grid>
+</ContentPage>
