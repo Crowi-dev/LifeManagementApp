@@ -12,10 +12,10 @@ public partial class TodoViewModel : ObservableObject
     private bool _sortByPriority = true;
 
     public ObservableCollection<TodoItem> Todos { get; } = new();
-    public List<int> Priorities { get; } = new() { 1, 2, 3 };
+    public List<int> Priorities { get; } = new() { 1, 2, 3, 4, 5 };
 
     [ObservableProperty] private string newTitle = "";
-    [ObservableProperty] private int newPriority = 2;
+    [ObservableProperty] private int newPriority = 3;
     [ObservableProperty] private DateTime newDueDate = DateTime.Today;
 
     public TodoViewModel(TodoService todoService) => _todoService = todoService;
@@ -25,8 +25,8 @@ public partial class TodoViewModel : ObservableObject
     {
         var all = await _todoService.GetAllAsync();
         var sorted = _sortByPriority
-            ? all.OrderBy(t => t.Priority).ThenBy(t => t.DueDate)
-            : all.OrderBy(t => t.DueDate).ThenBy(t => t.Priority);
+            ? all.OrderByDescending(t => t.Priority).ThenBy(t => t.DueDate)
+            : all.OrderBy(t => t.DueDate).ThenByDescending(t => t.Priority);
 
         Todos.Clear();
         foreach (var t in sorted)
@@ -42,7 +42,7 @@ public partial class TodoViewModel : ObservableObject
     [RelayCommand]
     private async Task AddAsync()
     {
-        if (string.IsNullOrWhiteSpace(NewTitle)) return;
+        if (string.IsNullOrWhiteSpace(NewTitle)) return;   // empty title not accepted
 
         await _todoService.AddAsync(new TodoItem
         {
@@ -51,6 +51,14 @@ public partial class TodoViewModel : ObservableObject
             DueDate = NewDueDate
         });
         NewTitle = "";
+        await LoadAsync();
+    }
+
+    [RelayCommand]
+    private async Task ToggleDoneAsync(TodoItem item)
+    {
+        item.IsDone = !item.IsDone;
+        await _todoService.UpdateAsync(item);
         await LoadAsync();
     }
 

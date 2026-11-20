@@ -1,7 +1,6 @@
 ﻿using LifeManagementApp.Data;
 using LifeManagementApp.Models;
 using Microsoft.EntityFrameworkCore;
-using System;
 
 namespace LifeManagementApp.Services;
 
@@ -12,12 +11,23 @@ public class TodoService
 
     public Task<List<TodoItem>> GetAllAsync() => _db.Todos.ToListAsync();
 
+    // Unfinished only, highest priority first, then earliest due date
     public Task<List<TodoItem>> GetTopAsync(int count) =>
-        _db.Todos.OrderBy(t => t.Priority).ThenBy(t => t.DueDate).Take(count).ToListAsync();
+        _db.Todos.Where(t => !t.IsDone)
+                 .OrderByDescending(t => t.Priority)
+                 .ThenBy(t => t.DueDate)
+                 .Take(count)
+                 .ToListAsync();
 
     public async Task AddAsync(TodoItem item)
     {
         _db.Todos.Add(item);
+        await _db.SaveChangesAsync();
+    }
+
+    public async Task UpdateAsync(TodoItem item)
+    {
+        _db.Todos.Update(item);
         await _db.SaveChangesAsync();
     }
 

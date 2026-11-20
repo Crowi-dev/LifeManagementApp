@@ -6,9 +6,9 @@
     <VerticalStackLayout Padding="20" Spacing="12">
         <Label Text="Weather in Vaasa" FontSize="20" FontAttributes="Bold" />
         <Label Text="{Binding WeatherText}" FontSize="16" />
-        <Label Text="🪁 Kitesurf weather! Wind over 5 m/s"
+        <Label Text="🪁 Kitesurf-keli!"
                IsVisible="{Binding IsKiteWeather}"
-               TextColor="DarkGreen" FontAttributes="Bold" />
+               TextColor="DarkGreen" FontAttributes="Bold" FontSize="18" />
 
         <Label Text="Top 3 todos" FontSize="20" FontAttributes="Bold" Margin="0,20,0,0" />
         <CollectionView ItemsSource="{Binding TopTodos}">

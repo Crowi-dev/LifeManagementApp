@@ -25,12 +25,15 @@
         <CollectionView Grid.Row="2" ItemsSource="{Binding Todos}">
             <CollectionView.ItemTemplate>
                 <DataTemplate>
-                    <Grid ColumnDefinitions="*,Auto" Padding="0,6">
+                    <Grid ColumnDefinitions="*,Auto,Auto" ColumnSpacing="8" Padding="0,6">
                         <VerticalStackLayout>
                             <Label Text="{Binding Title}" FontAttributes="Bold" />
                             <Label Text="{Binding Info}" FontSize="12" />
                         </VerticalStackLayout>
-                        <Button Grid.Column="1" Text="Delete"
+                        <Button Grid.Column="1" Text="Done"
+                                Command="{Binding Source={RelativeSource AncestorType={x:Type vm:TodoViewModel}}, Path=ToggleDoneCommand}"
+                                CommandParameter="{Binding .}" />
+                        <Button Grid.Column="2" Text="Delete"
                                 Command="{Binding Source={RelativeSource AncestorType={x:Type vm:TodoViewModel}}, Path=DeleteCommand}"
                                 CommandParameter="{Binding .}" />
                     </Grid>

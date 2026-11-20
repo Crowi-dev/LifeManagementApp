@@ -24,7 +24,7 @@ namespace LifeManagementApp
 #if DEBUG
     		builder.Logging.AddDebug();
 #endif      
-            var dbPath = Path.Combine(FileSystem.AppDataDirectory, "todos.db");
+            var dbPath = Path.Combine(FileSystem.AppDataDirectory, "lifemanagement.db");
             builder.Services.AddDbContext<AppDbContext>(
                 o => o.UseSqlite($"Filename={dbPath}"), ServiceLifetime.Singleton);
 
